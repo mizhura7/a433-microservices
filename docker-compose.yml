@@ -1,0 +1,33 @@
+# Untuk versi docker compose nya
+version: "3.3"
+
+# Service yang akan di gunakan
+services:
+  item_db:
+  # Menggunakan image mongo versi 3
+    image: mongo:3
+  # Selalu restart jika mongo berhenti
+    restart: always
+  # Run mongo di port 271017
+    ports:
+      - 27017:27017
+  # Membuat volume untuk database
+    volumes:
+      - app-db:/data/db
+    
+  item_app:
+  # Run item-app tergantung pada database mongo
+    depends_on:
+      - item_db
+    # Image yang digunakan dari dockerfile yang berhasil jadi image
+    image: mizhura7/item-app:v1
+    # Run di port 8080
+    ports:
+      - 80:8080
+    # Selalu restart jika item-app terhenti
+    restart: always
+
+volumes:
+  app-db:
+
+
